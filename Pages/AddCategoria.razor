@@ -1,0 +1,53 @@
+﻿@page "/addCategoria"
+@page "/addCategoria/{id:int}"
+@using ProyectoTiendaOnline.Data
+@using ProyectoTiendaOnline.Models
+@inject ICategoria CategoriaController
+@inject NavigationManager NavigationManager
+
+<h3>Agregar Categoria</h3>
+<EditForm Model="@categoria">
+    <table class="table table-borderless">
+        <tr>
+            <td> Nombre</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="categoria.Nombre" /></td>
+        </tr>
+        <tr>
+            <td> Descripcion</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="categoria.Descripcion" /></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <input type="submit" class="btn btn-outline-success" value="Guardar" @onclick="GuardarCategoria" />
+                <input type="button" class="btn btn-outline-danger " value="Cancelar" @onclick="Cancelar" />
+            </td>
+        </tr>
+    </table>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    private Categoria categoria = new Categoria();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (id != 0)
+        {
+            categoria = await CategoriaController.DetallesCategoria(id);
+        }
+
+    }
+
+    protected async Task GuardarCategoria()
+    {
+        await CategoriaController.GuardarCategoria(categoria);
+        NavigationManager.NavigateTo("/");
+    }
+
+    protected void Cancelar()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

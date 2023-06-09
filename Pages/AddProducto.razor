@@ -1,0 +1,135 @@
+﻿
+@page "/addProducto"
+@page "/addProducto/{id:int}"
+@using ProyectoTiendaOnline.Data
+@using ProyectoTiendaOnline.Models
+@inject IProducto ProductoController
+@inject ICategoria CategoriaController
+@inject NavigationManager NavigationManager
+@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+<h3> AddProducto</h3>
+
+
+
+<EditForm Model="@producto">
+    <table class="table table-borderless">
+        <tr>
+            <td> Nombre</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="producto.Nombre" /></td>
+        </tr>
+
+
+
+        <tr>
+            <td> Precio</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="producto.Precio" /></td>
+        </tr>
+        <tr>
+            <td> Descripcion</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="producto.Descripcion" /></td>
+        </tr>
+        @producto.FechaPublicacion = @DateTime.Now;
+        <tr>
+
+            <td> Categoria</td>
+            <td>
+                @if (categorias == null)
+                {
+
+
+                    <h1>cargando </h1>
+                }
+                else
+                {
+                    <select id="categorias" class="form-control col-sm-4" @bind="producto.CategoriaId">
+                        <option value="0">Seleccione una categoria</option>
+                        @foreach (var categoria in categorias)
+                        {
+                            <option value="@categoria.Id" class="form-control col-sm-4">@categoria.Descripcion</option>
+                        }
+
+                    </select>
+                }
+            </td>
+
+
+        </tr>
+        <tr>
+            <td> Imagen</td>
+            <td>
+                <div class="input-group">
+                    <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                    <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Guardar</button>
+                </div>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <input type="submit" class="btn btn-outline-success" value="Guardar" @onclick="GuardarProducto" />
+                <input type="button" class="btn btn-outline-danger " value="Cancelar" @onclick="Cancelar" />
+            </td>
+        </tr>
+    </table>
+
+
+
+
+
+
+</EditForm>
+
+
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+
+
+    
+        private Producto producto = new Producto();
+        public IEnumerable<Categoria> categorias { get; set; }
+
+        public string Message { get; set; }
+
+        public string nombreLocal { get; set; }
+
+        protected override async Task OnInitializedAsync()
+        {
+            try
+            {
+                categorias = await CategoriaController.ObtenerAllCategorias();
+
+            }
+            catch (Exception e)
+            {
+                Message = e.Message;
+            }
+            if (id != 0)
+            {
+                producto = await ProductoController.DetallesProducto(id);
+            }
+
+        }
+
+        protected async Task GuardarProducto()
+        {
+            await ProductoController.GuardarProducto(producto);
+            NavigationManager.NavigateTo("/");
+        }
+
+        protected void Cancelar()
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
+
+
+}

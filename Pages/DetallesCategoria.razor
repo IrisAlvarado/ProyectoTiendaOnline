@@ -1,0 +1,66 @@
+﻿@page "/Categorias"
+@using ProyectoTiendaOnline.Data
+@using ProyectoTiendaOnline.Models
+@inject ICategoria CategoriaController
+
+<h3>Categorias</h3>
+
+<p></p>
+@Message
+
+<div>
+    <a href="/addCategoria"> Add New Category</a>
+</div>
+
+@if (categorias == null)
+{
+    <p>Cargandoooo...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Descripcion
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var categoria in categorias)
+            {
+                <tr>
+                    <th>@categoria.Nombre</th>
+                    <th>@categoria.Descripcion</th>
+                    <th><a href="/addCategoria/@categoria.Id">Editar</a>  <a href="/eliminarCategoria/@categoria.Id">Eliminar</a></th>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    public IEnumerable<Categoria> categorias { get; set; }
+    public string Message { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            categorias = await CategoriaController.ObtenerAllCategorias();
+        }
+        catch (Exception e)
+        {
+            Message = e.Message;
+        }
+
+
+    }
+}
