@@ -1,80 +1,17 @@
 ﻿@page "/"
 @using ProyectoTiendaOnline.Data
 @using ProyectoTiendaOnline.Models
-@inject IProducto ProductoController
 
-<h1>Hello, world!</h1>
 
-@if (productos == null)
-{
-    <p>Cargandoooo...</p>
-}
-else
-{
-    <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-    <div class="row col-md-12">
 
-        @foreach (var prod in productos)
-        {
 
-            <div class="col-md-3">
-                <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">@prod.Nombre</h5>
-                        <h5>Precio: @prod.Precio</h5>
-                        <p class="card-text">@prod.Descripcion</p>
-                    </div>
-                    <input type="submit" class="btn btn-outline-success" value="Comprar" />
-
-                </div>
-
-            </div>
-
-        }
+    <div class="row-col-lg-12">
+        <section>
+            <h1>Bienvenido a tu Tienda Online</h1>
+            <a href="#">Iniciar</a>
+        </section>
     </div>
+   
+           
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-}
-
-@code{
-
-    public IEnumerable<Producto> productos { get; set; }
-    public string Message { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            productos = await ProductoController.ObtenerAllProductos();
-        }
-        catch (Exception e)
-        {
-            Message = e.Message;
-        }
-
-
-    }
-}
-
-
+    
